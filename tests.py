@@ -11,7 +11,7 @@ sample_csv = """trip_id,duration,start_time,end_time,start_station,start_lat,sta
 373688718,1016,4/1/2021 1:49,4/1/2021 18:45,3214,39.978909,-75.157799,3108,39.953159,-75.165512,16508,30,One Way,Indego30,electric
 373688719,1016,99/100/2021 1:49,4/1/2021 18:45,3214,39.978909,-75.157799,3108,39.953159,-75.165512,1650z,30,One Way,Indego30,standard
 """
-
+# 3213,3000, 3214,3214
 
 class EtlTestCase(unittest.TestCase):
     rows = []
@@ -35,7 +35,7 @@ class EtlTestCase(unittest.TestCase):
             self.rows.append(row)
         self.assertEqual(len(self.rows), 4)
 
-    def xest_2_transform(self):
+    def test_2_transform(self):
         trip_cnt = 0
         for trip in indego_trip_etl.transform(self.rows):
             trip_cnt += 1
@@ -50,7 +50,7 @@ class EtlTestCase(unittest.TestCase):
             sum([t["bike_id"] for t in self.trips]),
         )
 
-    def xest_3_load(self):
+    def test_3_load(self):
         indego_trip_etl.load(self.trips, self.conn)
         cur = self.conn.cursor()
         cur.execute("SELECT count(*) from trips")
